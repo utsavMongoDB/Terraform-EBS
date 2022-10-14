@@ -1,23 +1,18 @@
 #!/bin/bash
-# usage: ./deploy-ecr.sh terraform-partner test us-east-1
+# usage: ./deploy-ecr.sh terraform-partner
+
+# Name of your application, should be the same as in setup
+NAME=$1
+
 echo Creating deployment plan............
 terraform plan -out plan.tfplan
 
 echo Applying plan............
 terraform apply plan.tfplan    
 
-# Name of your application, should be the same as in setup
-NAME=$1
-
-# Stage/environment e.g. `staging`, `test`, `production``
-STAGE=$2
-
-# AWS Region where app should be deployed e.g. `us-east-1`, `eu-central-1`
-REGION=$3
-
 EB_BUCKET=$NAME-deployments
-ENV=$NAME-$STAGE
-VERSION=$STAGE-$(date +%s)
+ENV=$NAME
+VERSION=$NAME-$(date +%s)
 ZIP=$VERSION.zip
 
 # Zip up the Dockerrun file
